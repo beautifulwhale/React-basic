@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/react/16.8.6/umd/react.development.js"></script>
+    <script src="https://cdn.bootcss.com/react-dom/16.8.6/umd/react-dom.development.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.26.0/babel.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    class App extends React.Component {
+        state = { isLogin: false, active: true }
+        render() {
+            const { isLogin } = this.state
+            // 较为复杂逻辑时采用if  较为简单时候采用三目
+            let text = null;
+            let btnText = null
+            if (isLogin) {
+                text = 'welcome you'
+                btnText = 'logout'
+            } else {
+                text = 'please login'
+                btnText = 'login'
+            }
+            return (
+                <div>
+                    <h1 className={'good' + (this.state.active ? 'active' : '')}>{text}</h1>
+                    <button onClick={(e) => this.btnClick(btnText, e)}>{btnText}</button>
+                    <h3 style={{ display: isLogin ? 'block' : 'none' }}>我只在登录的时候显示呢</h3>
+                </div>
+            )
+        }
+        btnClick(text, e) {
+            this.setState({
+                isLogin: !this.state.isLogin
+            })
+            console.log(text, e);
+        }
+    }
+    ReactDOM.render(<App />, document.getElementById('root'))
+</script>
+
+</html>
