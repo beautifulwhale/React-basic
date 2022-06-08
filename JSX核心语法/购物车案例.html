@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/react/16.8.6/umd/react.development.js"></script>
+    <script src="https://cdn.bootcss.com/react-dom/16.8.6/umd/react-dom.development.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.26.0/babel.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    class App extends React.Component {
+        state = {
+            books: [
+                { id: 1, name: '童年', price: 20, count: 1 },
+                { id: 2, name: '活着', price: 30, count: 1 },
+                { id: 3, name: '我的大学', price: 40, count: 4 },
+                { id: 4, name: '骆驼祥子', price: 55, count: 1 }
+            ],
+        }
+        renderBookList() {
+            return (
+                <div>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>书名</th>
+                                <th>价格</th>
+                                <th>数量</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.books.map((item, index) => {
+                                    return (
+                                        <tr key={item.id}>
+                                            <td>{index + 1}</td>
+                                            <td>{item.name}</td>
+                                            <td>{item.price}</td>
+                                            <td>
+                                                <button disabled={item.count <= 1} onClick={() => this.changeBookCount(index, -1)}>-1</button>
+                                                {item.count}
+                                                <button onClick={() => this.changeBookCount(index, 1)}>+1</button>
+                                            </td>
+                                            <td>
+                                                <button onClick={() => this.removeBook(item.id)}>删除</button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
+                    <h1>总价格：{this.getTotalPrice()}</h1>
+                </div>
+            )
+        }
+        renderEmptyTips() {
+            return <h2>购物车为空~~~</h2>
+        }
+        render() {
+            return this.state.books.length ? this.renderBookList() : this.renderEmptyTips()
+        }
+        // 获取图书总价格
+        getTotalPrice() {
+            let totalPrice = 0
+            totalPrice = this.state.books.reduce((preValue, item) => {
+                return preValue + item.count * item.price
+            }, 0)
+            return totalPrice
+        }
+        removeBook(id) {
+            this.setState({
+                books: this.state.books.filter(item => item.id !== id)
+            })
+        }
+        changeBookCount(index, count) {
+            const newBooks = [...this.state.books]
+            newBooks[index].count += count
+            this.setState({ books: newBooks })
+        }
+    }
+    ReactDOM.render(<App />, document.getElementById('root'))
+</script>
+
+</html>
